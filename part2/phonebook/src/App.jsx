@@ -20,9 +20,16 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    if (persons.find(p => p.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
-      setNewName('')
+    const existingPerson = persons.find(p => p.name === newName)
+    if (existingPerson) {
+      if (confirm(`${newName} is already added to phonebook. Replace old number with this new one?`)) {
+        const newPerson = {...existingPerson, number: newNumber}
+        personService
+        .update(existingPerson.id, newPerson)
+        .then(response => setPersons(persons.map(p => p.id === existingPerson.id ? newPerson : p)))
+
+      }
+
     } 
     else {
       const newPerson = {
@@ -32,10 +39,10 @@ const App = () => {
       personService
       .create(newPerson)
       .then(response => setPersons(persons.concat(response.data)))
-      setNewName('')
-      setNewNumber('')
+      
     }
-    
+    setNewName('')
+    setNewNumber('')
   }
 
   const deletePerson = (id) => {
