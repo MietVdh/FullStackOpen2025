@@ -44,6 +44,10 @@ const onFilterChange = (event) => {
   setFilter(event.target.value)
 }
 
+const handleCountrySelect = country => {
+  setCountries([country])
+}
+
 if (country) {
   return (
   <Country country={country} />
@@ -55,7 +59,7 @@ return (
     {countries.length > 10 
       ? <p>Too many matches, specify another filter</p>
       : <ul>
-          {countries.map(c => <li key={c}>{c}</li>)}
+          {countries.map(c => <li key={c}>{c} <button onClick={() => handleCountrySelect(c)}>Show</button></li>)}
         </ul>
     }
   </div>
