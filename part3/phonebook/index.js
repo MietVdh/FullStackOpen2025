@@ -50,9 +50,7 @@ app.get('/info', (request, response) => {
 })
 
 app.post('/api/persons', (request, response) => {
-    console.log("Hello from POST")
     const body = request.body
-    console.log(body)
     if (!body.name) {
         return response.status(400).json({
             error: "name missing"
