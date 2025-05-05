@@ -13,12 +13,23 @@ const App = () => {
   const [filter, setFilter] = useState('')
   const [notification, setNotification] = useState(null)
   const [error, setError] = useState(null)
+  const [personsShown, setPersonsShown] = useState([])
 
   useEffect(() => {
     personService
     .getAll()
     .then(response => setPersons(response.data))
   }, [])
+
+  useEffect(() => {
+    if (filter) {
+      console.log("Persons", persons)
+      setPersonsShown(persons.filter(p => p.name.toLowerCase().includes(filter.toLowerCase())))
+    } else {
+      console.log("Persons", persons)
+      setPersonsShown(persons)
+    }
+  }, [filter, persons])
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -66,7 +77,7 @@ const App = () => {
       personService
       .deletePerson(id)
       .then(response => {
-        setPersons(persons.filter(p => p.id !== response.data.id))
+        setPersons(persons.filter(p => p.id !== id))
         setNotification(`${personToDelete.name} was deleted from phonebook`)
         setTimeout(() => setNotification(null), 5000)})
       .catch(error => {
@@ -90,7 +101,7 @@ const App = () => {
     setFilter(event.target.value)
   }
 
-  const personsShown = filter ? persons.filter(p => p.name.toLowerCase().includes(filter.toLowerCase())) : persons
+  // const personsShown = filter ? persons.filter(p => p.name.toLowerCase().includes(filter.toLowerCase())) : persons
 
   return (
     <div>

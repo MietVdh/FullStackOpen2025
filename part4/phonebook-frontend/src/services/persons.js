@@ -4,9 +4,7 @@ const baseUrl = '/api/persons'
 
 const getAll = () => axios.get(baseUrl)
 
-
 const create = newPerson => axios.post(baseUrl, newPerson)
-
 
 const update = (id, updatedPerson) => axios.put(`${baseUrl}/${id}`, updatedPerson)
 
