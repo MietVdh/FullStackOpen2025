@@ -23,10 +23,8 @@ const App = () => {
 
   useEffect(() => {
     if (filter) {
-      console.log("Persons", persons)
       setPersonsShown(persons.filter(p => p.name.toLowerCase().includes(filter.toLowerCase())))
     } else {
-      console.log("Persons", persons)
       setPersonsShown(persons)
     }
   }, [filter, persons])
