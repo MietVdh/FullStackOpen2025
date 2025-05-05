@@ -11,8 +11,7 @@ morgan.token('req_body', function getRequestBody (req) {
   })
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :req_body'))
-
-
+app.use(express.static('dist'))
 
 let persons = [
     { 
@@ -98,7 +97,7 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
