@@ -15,11 +15,13 @@ const App = () => {
   const [error, setError] = useState(null)
   const [personsShown, setPersonsShown] = useState([])
 
+
   useEffect(() => {
     personService
     .getAll()
     .then(response => setPersons(response.data))
   }, [])
+
 
   useEffect(() => {
     if (filter) {
@@ -28,6 +30,7 @@ const App = () => {
       setPersonsShown(persons)
     }
   }, [filter, persons])
+
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -46,28 +49,29 @@ const App = () => {
           setPersons(persons.filter(p => p.id !== existingPerson.id))
           setTimeout(() => setError(null), 5000)
         })
-        
-
       }
-
-    } 
-    else {
+    } else {
       const newPerson = {
         name: newName,
         number: newNumber
       }
+      console.log("Trying to add")
+
       personService
       .create(newPerson)
       .then(response => {
         setPersons(persons.concat(response.data))
         setNotification(`${newName}'s number was successfully added`)
-        setTimeout(() => setNotification(null), 5000)
-    })
-      
+        setTimeout(() => setNotification(null), 5000)})
+      .catch(error => {
+        setError(error.response.data.error)
+        setTimeout(() => setError(null), 5000)})
     }
+
     setNewName('')
     setNewNumber('')
   }
+
 
   const deletePerson = (id) => {
     const personToDelete = persons.find(p => p.id === id)
@@ -81,20 +85,21 @@ const App = () => {
       .catch(error => {
         setError(`Information for ${personToDelete.name} has already been removed from server`)
         setPersons(persons.filter(p => p.id !== id))
-        setTimeout(() => setError(null), 5000)
-    })
-    }
-    
+        setTimeout(() => setError(null), 5000)})
+    } 
   }
+
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
 
+
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value)
   }
 
+  
   const handleFilterChange = (event) => {
     setFilter(event.target.value)
   }
@@ -116,10 +121,8 @@ const App = () => {
           newNumber={newNumber}
           addPerson={addPerson}
       />
-      
       <h2>Numbers</h2>
       <Persons personsShown={personsShown} deletePerson={deletePerson}/>
-      
     </div>
   )
 }
