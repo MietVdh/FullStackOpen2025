@@ -78,6 +78,21 @@ test('making a POST request creates a new blog', async () => {
 
 // 4.11 Write a test that verifies that if the likes property is missing from the request, it will default to the value 0
 // Make required changes to code so it passes test
+test('if POST request is sent without "likes" property, it defaults to 0', async () => {
+  const newBlog = {
+    title: 'A blog with no likes',
+    author: 'author of blog with no likes',
+    url: 'www.nolikes.test'
+  }
+
+  const response = await api
+    .post('/api/blogs')
+    .send(newBlog)
+  
+  const newlyAddedBlog = response.body
+
+  assert.strictEqual(newlyAddedBlog.likes, 0)
+})
 
 
 // 4.12  Write tests related to creating new blogs via the /api/blogs endpoint, 
