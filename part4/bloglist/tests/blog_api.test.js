@@ -135,6 +135,14 @@ test('when blog gets deleted, it is no longer in list of blogs', async () => {
   assert(!titlesAtEnd.includes(blogToDelete.title))
 })
 
+test('the number of likes for a blog post can be updated', async () => {
+  const blogsAtStart = await api.get('/api/blogs')
+  const blogToUpdate = blogsAtStart.body[0]
+  const updatedBlog = await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .send({...blogToUpdate, likes: 12})
+  assert.strictEqual(updatedBlog.body.likes, 12)
+})
 
 after(async () => {
   await mongoose.connection.close()
