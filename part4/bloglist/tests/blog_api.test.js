@@ -55,6 +55,25 @@ test('blog post has property "id"', async () => {
 
 // 4.10 Write a test that verifies that making an HTTP POST request to the /api/blogs URL successfully creates a new blog post
 // refactor to use async/await
+test('making a POST request creates a new blog', async () => {
+  const newBlog = {
+    title: 'A newly created post',
+    author: 'me',
+    url: 'http://www.here.com',
+    likes: 2,
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = (await api.get('/api/blogs')).body
+  assert.strictEqual(blogsAtEnd.length, initialBlogs.length + 1)
+  const titles = blogsAtEnd.map(b => b.title)
+  assert(titles.includes('A newly created post'))
+})
 
 
 // 4.11 Write a test that verifies that if the likes property is missing from the request, it will default to the value 0
