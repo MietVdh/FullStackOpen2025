@@ -125,6 +125,16 @@ test('if url is missing from POST request, response status code is 400', async (
     .expect(400)
 })
 
+test('when blog gets deleted, it is no longer in list of blogs', async () => {
+  const blogsAtStart = await api.get('/api/blogs')
+  const blogToDelete = blogsAtStart.body[0]
+  console.log(blogToDelete.title)
+  await api.delete(`/api/blogs/${blogToDelete.id}`)
+
+  const titlesAtEnd = (await api.get('/api/blogs')).body.map(b => b.title)
+  assert(!titlesAtEnd.includes(blogToDelete.title))
+})
+
 
 after(async () => {
   await mongoose.connection.close()
