@@ -41,12 +41,16 @@ test('all blogs are returned', async () => {
   assert.strictEqual(response.body.length, initialBlogs.length)
 })
 
-after(async () => {
-  await mongoose.connection.close()
-})
 
-// 4.9: Write a test that verifies that the unique identifier property of the blog posts is named id,
+// 4.9: Write a test that verifies 
+// that the unique identifier property of the blog posts is named id,
 //  by default the database names the property _id.
+test('blog post has property "id"', async () => {
+  const response = await api.get('/api/blogs')
+  const allBlogs = response.body
+  const firstBlog = allBlogs[0]
+  assert(firstBlog.hasOwnProperty('id'))
+})
 
 
 // 4.10 Write a test that verifies that making an HTTP POST request to the /api/blogs URL successfully creates a new blog post
@@ -61,3 +65,9 @@ after(async () => {
 // that verify that if the title or url properties are missing from the request data, 
 // the backend responds to the request with the status code 400 Bad Request.
 // Make required changes to code so it passes test
+
+
+
+after(async () => {
+  await mongoose.connection.close()
+})
