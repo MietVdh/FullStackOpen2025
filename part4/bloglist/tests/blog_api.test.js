@@ -99,7 +99,31 @@ test('if POST request is sent without "likes" property, it defaults to 0', async
 // that verify that if the title or url properties are missing from the request data, 
 // the backend responds to the request with the status code 400 Bad Request.
 // Make required changes to code so it passes test
+test('if title is missing from POST request, response status code is 400', async () => {
+  const newBlog = {
+    author: 'Author with no blog',
+    url: 'www.example.com/nothing',
+    likes: 12
+  }
 
+  const response = await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+})
+
+test('if url is missing from POST request, response status code is 400', async () => {
+  const newBlog = {
+    title: 'Blog with no url',
+    author: 'Author with no blog',
+    likes: 12
+  }
+
+  const response = await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+})
 
 
 after(async () => {
