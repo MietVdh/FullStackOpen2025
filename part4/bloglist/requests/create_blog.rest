@@ -1,11 +1,12 @@
 POST http://localhost:3003/api/blogs/
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI2ODI3NjMwOWRiMGUwODNhMWY4YjliNDQiLCJpYXQiOjE3NDc3NjYzNTB9.zvMK-Bnri0Vn959OYsMetc_-htSNOJ65V7Fz4cN0c1w
 
 {
-    "title": "Trying to add user",
+    "title": "Adding post with JWT",
     "author": "The author",
     "url": "Link to blog",
-    "likes": 112
+    "likes": 4
 }
 
 ###
