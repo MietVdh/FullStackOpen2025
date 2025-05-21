@@ -5,6 +5,7 @@ const supertest = require('supertest')
 const app = require('../app')
 const Blog = require('../models/blog')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 
 const api = supertest(app)
@@ -24,10 +25,34 @@ const initialBlogs = [
   }
 ]
 
+const userInfo = {
+  name: 'Harry Potter',
+  username: 'harry',
+  password: 'quidditch'
+}
+
+let token = ''
+
 beforeEach(async () => {
   await Blog.deleteMany()
+  await User.deleteMany()
 
+  const newUser = new User({
+    username: userInfo.username,
+    name: userInfo.name,
+    passwordHash: await bcrypt.hash(userInfo.password, 10)
+  })
+  const savedUser = await newUser.save()
+  const userForToken = {
+    username: savedUser.username,
+    id: savedUser._id
+  }
+  token = jwt.sign(userForToken, process.env.SECRET)
+  initialBlogs.forEach(b => b.user = savedUser)
+  
+    
   await Blog.insertMany(initialBlogs)
+  
 })
 
 describe('retrieving all blogs', () => {
@@ -54,7 +79,7 @@ describe('retrieving all blogs', () => {
 
 describe('creating a new post', () => {
 
-  test('succeeds with status code 201 if required fields are present', async () => {
+  test('succeeds with status code 201 if token and required fields are present', async () => {
     const newBlog = {
       title: 'A newly created post',
       author: 'me',
@@ -65,6 +90,7 @@ describe('creating a new post', () => {
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set({ Authorization: `Bearer ${token}` })
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -84,6 +110,7 @@ describe('creating a new post', () => {
 
     const response = await api
       .post('/api/blogs')
+      .set({ Authorization: `Bearer ${token}` })
       .send(newBlog)
     
     const newlyAddedBlog = response.body
@@ -101,6 +128,7 @@ describe('creating a new post', () => {
 
     const response = await api
       .post('/api/blogs')
+      .set({ Authorization: `Bearer ${token}` })
       .send(newBlog)
       .expect(400)
   })
@@ -114,24 +142,56 @@ describe('creating a new post', () => {
 
     const response = await api
       .post('/api/blogs')
+      .set({ Authorization: `Bearer ${token}` })
       .send(newBlog)
       .expect(400)
+  })
+
+  test('fails with status code 401 if token is missing', async () => {
+    const newBlog = {
+      title: 'A newly created post',
+      author: 'me',
+      url: 'http://www.here.com',
+      likes: 2,
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
+
   })
 })
 
 describe('deleting a blog', () => {
 
-  test('succeeds with status code 204 if id is valid', async () => {
+  test('succeeds with status code 204 if id and token are valid', async () => {
     const blogsAtStart = await api.get('/api/blogs')
     const blogToDelete = blogsAtStart.body[0]
     console.log(blogToDelete.title)
-    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set({ Authorization: `Bearer ${token}` })
+      .expect(204)
 
     const titlesAtEnd = (await api.get('/api/blogs')).body.map(b => b.title)
     assert(!titlesAtEnd.includes(blogToDelete.title))
   })
 
+  test('fails with status code 401 if token is invalid or missing', async () => {
+    const blogsAtStart = await api.get('/api/blogs')
+    const blogToDelete = blogsAtStart.body[0]
+    console.log(blogToDelete.title)
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(401)
+
+    const titlesAtEnd = (await api.get('/api/blogs')).body.map(b => b.title)
+    assert(titlesAtEnd.includes(blogToDelete.title))
+  })
+
 })
+
 
 describe('updating a post', () => {
   test('correctly updates number of likes in database', async () => {
