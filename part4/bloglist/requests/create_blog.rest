@@ -12,10 +12,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sd
 ###
 POST http://localhost:3003/api/blogs/
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RlciIsImlkIjoiNjgyZGUwMDllMTFhYWFjNzJhYTdlNjkzIiwiaWF0IjoxNzQ3ODM2OTg0fQ.Ti1VeK_-JN-CCMqJFvw4bpfIevd-pGNCHNbr4WiygsM
 
 {
-    "title": "Interesting blog post",
-    "author": "Author of blog",
-    "url": "Link to interesting blog",
-    "likes": 5
+    "title": "How to move tokenExtractor into middleware",
+    "author": "JWT Dude",
+    "url": "Link",
+    "likes": 13
 }
