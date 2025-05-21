@@ -25,3 +25,13 @@ Content-Type: application/json
     "name": "Testy McTestFace",
     "password": "testing"
 }
+
+###
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "harry",
+    "name": "Harry Potter",
+    "password": "quidditch"
+}

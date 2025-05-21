@@ -12,11 +12,10 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
   const blog = new Blog(request.body)
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    if (!decodedToken.id) {
-      return response.status(401).json({ error: 'token invalid' })
-    }
-  const user = await User.findById(decodedToken.id)
+  const user = request.user
+  if (!user) {
+    response.status(401).json({ error: 'you must be logged in to post' })
+  }
   if (!blog.title || !blog.url) {
     response.status(400).end()
   }
@@ -29,13 +28,13 @@ blogsRouter.post('/', async (request, response) => {
 
 
 blogsRouter.delete('/:id', async (request, response) => {
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: 'token invalid' })
+  const user = request.user
+  if (!user) {
+    return response.status(401).json({ error: 'you must be logged in' })
   }
-  const userId = decodedToken.id
-  const blog = await Blog.findByIdAndDelete(request.params.id)
-  if (blog.user.toString() === userId.toString()) {
+  const blog = await Blog.findById(request.params.id)
+  if (blog.user.toString() === user.id.toString()) {
+    await Blog.findByIdAndDelete(request.params.id)
     response.status(204).end()
   } else {
     response.status(401).json({ error: 'token invalid' })

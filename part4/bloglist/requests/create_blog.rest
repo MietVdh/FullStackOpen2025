@@ -20,3 +20,16 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc
     "url": "Link",
     "likes": 13
 }
+
+###
+POST http://localhost:3003/api/blogs/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhhcnJ5IiwiaWQiOiI2ODJkZTUyMGY4NjIyN2FkYTA1NzQ3ZjIiLCJpYXQiOjE3NDc4MzgyNzV9.Jm8uRMtgtDkDlUAnlUyNwm5ngAknbS9925fHRWLgh1Q
+
+{
+    "title": "A history of Quidditch",
+    "author": "Bathilda Bagshot",
+    "url": "www.historyofmagic.com/quidditch",
+    "likes": 7
+}
+
