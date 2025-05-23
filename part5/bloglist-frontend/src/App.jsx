@@ -3,13 +3,10 @@ import BlogsList from './components/BlogsList'
 import LoginForm from './components/LoginForm'
 import NewBlogForm from './components/NewBlogForm'
 import blogService from './services/blogs'
-import loginService from './services/login';
 
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
 
@@ -36,24 +33,6 @@ const App = () => {
     }, 5000);
   }
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
-
-    try {
-      const user = await loginService.login({ username, password })
-
-      window.localStorage.setItem('bloglistUser', JSON.stringify(user))
-      blogService.setToken(user.token)
-      setUser(user)
-      setUsername('')
-      setPassword('')
-      displayMessage('Login successful')
-    } catch (exception) {
-      displayMessage('Wrong credentials')
-      console.log('Wrong credentials')
-    }
-  }
-
   const handleLogout = event => {
     event.preventDefault()
 
@@ -71,17 +50,17 @@ const App = () => {
       { user === null ?
       
         <LoginForm 
-          username={username} 
-          password={password} 
-          handleLogin={handleLogin}
-          setUsername={setUsername}
-          setPassword={setPassword}
+          user={user}
+          setUser={setUser}
+          displayMessage={displayMessage}
         />
       : 
         <div>
           <p>{user.name} logged in </p>
           <button onClick={handleLogout}>Log out</button>
+
           <NewBlogForm setBlogs={setBlogs} blogs={blogs} displayMessage={displayMessage}/>
+          
           <BlogsList blogs={blogs} />
         </div>
       }
