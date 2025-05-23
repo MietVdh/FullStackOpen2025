@@ -11,6 +11,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [message, setMessage] = useState(null)
 
 
   useEffect(() => {
@@ -28,6 +29,13 @@ const App = () => {
     }
   }, [])
 
+  const displayMessage = msg => {
+    setMessage(msg)
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000);
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -39,7 +47,9 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+      displayMessage('Login successful')
     } catch (exception) {
+      displayMessage('Wrong credentials')
       console.log('Wrong credentials')
     }
   }
@@ -50,11 +60,14 @@ const App = () => {
     window.localStorage.removeItem('bloglistUser')
     blogService.setToken(null)
     setUser(null)
+    displayMessage('You were successfully logged out')
   }
 
 
   return (
     <div>
+      { message && <div className="notification">{message}</div> }
+
       { user === null ?
       
         <LoginForm 
@@ -68,7 +81,7 @@ const App = () => {
         <div>
           <p>{user.name} logged in </p>
           <button onClick={handleLogout}>Log out</button>
-          <NewBlogForm setBlogs={setBlogs} blogs={blogs}/>
+          <NewBlogForm setBlogs={setBlogs} blogs={blogs} displayMessage={displayMessage}/>
           <BlogsList blogs={blogs} />
         </div>
       }
