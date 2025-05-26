@@ -9,6 +9,7 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
+  const [newBlogFormVisible, setNewBlogFormVisible] = useState(false)
 
 
   useEffect(() => {
@@ -43,6 +44,25 @@ const App = () => {
   }
 
 
+  const newBlogForm = () => {
+    const hideWhenVisible = { display: newBlogFormVisible ? 'none' : ''}
+    const showWhenVisible = { display: newBlogFormVisible ? '' : 'none'}
+
+    return (
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setNewBlogFormVisible(true)}>new blog</button>
+        </div>
+        <div style={showWhenVisible}>
+          <NewBlogForm setBlogs={setBlogs} blogs={blogs} displayMessage={displayMessage}/>
+          <button onClick={() => setNewBlogFormVisible(false)}>cancel</button>
+        </div>
+      </div>
+      
+    )
+  }
+
+
   return (
     <div>
       { message && <div className="notification">{message}</div> }
@@ -56,10 +76,10 @@ const App = () => {
         />
       : 
         <div>
-          <p>{user.name} logged in </p>
-          <button onClick={handleLogout}>Log out</button>
+          <p>{user.name} logged in  <button onClick={handleLogout}>Log out</button></p>
+          
 
-          <NewBlogForm setBlogs={setBlogs} blogs={blogs} displayMessage={displayMessage}/>
+          {newBlogForm()}
           
           <BlogsList blogs={blogs} />
         </div>
