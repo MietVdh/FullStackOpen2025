@@ -15,7 +15,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const App = () => {
     setMessage(msg)
     setTimeout(() => {
       setMessage(null)
-    }, 5000);
+    }, 5000)
   }
 
   const handleLogout = event => {
@@ -45,8 +45,8 @@ const App = () => {
 
 
   const newBlogForm = () => {
-    const hideWhenVisible = { display: newBlogFormVisible ? 'none' : ''}
-    const showWhenVisible = { display: newBlogFormVisible ? '' : 'none'}
+    const hideWhenVisible = { display: newBlogFormVisible ? 'none' : '' }
+    const showWhenVisible = { display: newBlogFormVisible ? '' : 'none' }
 
     return (
       <div>
@@ -54,15 +54,14 @@ const App = () => {
           <button onClick={() => setNewBlogFormVisible(true)}>new blog</button>
         </div>
         <div style={showWhenVisible}>
-          <NewBlogForm 
-            setBlogs={setBlogs} 
-            blogs={blogs} 
-            displayMessage={displayMessage} 
+          <NewBlogForm
+            setBlogs={setBlogs}
+            blogs={blogs}
+            displayMessage={displayMessage}
             setNewBlogFormVisible={setNewBlogFormVisible}/>
           <button onClick={() => setNewBlogFormVisible(false)}>cancel</button>
         </div>
       </div>
-      
     )
   }
 
@@ -72,22 +71,20 @@ const App = () => {
       { message && <div className="notification">{message}</div> }
 
       { user === null ?
-      
-        <LoginForm 
+        <LoginForm
           user={user}
           setUser={setUser}
           displayMessage={displayMessage}
         />
-      : 
+        :
         <div>
           <p>{user.name} logged in  <button onClick={handleLogout}>Log out</button></p>
-          
 
           {newBlogForm()}
-          
-          <BlogsList 
-            blogs={blogs} 
-            setBlogs={setBlogs} 
+
+          <BlogsList
+            blogs={blogs}
+            setBlogs={setBlogs}
             user={user}
             displayMessage={displayMessage}/>
         </div>

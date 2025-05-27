@@ -8,7 +8,7 @@ const Blog = ({ blog, user, blogs, setBlogs, displayMessage }) => {
 
 
   const handleLikeClick = async () => {
-    const updatedBlog = await blogService.update(blog, {...blog, likes: likes + 1})
+    const updatedBlog = await blogService.update(blog, { ...blog, likes: likes + 1 })
     setLikes(likes + 1)
   }
 
@@ -36,10 +36,9 @@ const Blog = ({ blog, user, blogs, setBlogs, displayMessage }) => {
         <div>Added by {blog.user.name}</div>
         <button onClick={() => setShowDetails(false)}>hide details</button>
         {user.username === blog.user.username ?
-        <button onClick={handleRemove}>remove</button>
-        : ''}
+          <button onClick={handleRemove}>remove</button>
+          : '' }
       </div>
-      
     )
   }
 
@@ -48,7 +47,7 @@ const Blog = ({ blog, user, blogs, setBlogs, displayMessage }) => {
       <div>
         <span><b>{blog.title}</b></span> - {blog.author}
         {showDetails ? details() : <button onClick={() => setShowDetails(true)}>view</button>}
-      </div>  
+      </div>
     </div>
   )
 }
