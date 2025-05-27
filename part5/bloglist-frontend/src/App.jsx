@@ -54,7 +54,11 @@ const App = () => {
           <button onClick={() => setNewBlogFormVisible(true)}>new blog</button>
         </div>
         <div style={showWhenVisible}>
-          <NewBlogForm setBlogs={setBlogs} blogs={blogs} displayMessage={displayMessage}/>
+          <NewBlogForm 
+            setBlogs={setBlogs} 
+            blogs={blogs} 
+            displayMessage={displayMessage} 
+            setNewBlogFormVisible={setNewBlogFormVisible}/>
           <button onClick={() => setNewBlogFormVisible(false)}>cancel</button>
         </div>
       </div>
@@ -81,7 +85,11 @@ const App = () => {
 
           {newBlogForm()}
           
-          <BlogsList blogs={blogs} />
+          <BlogsList 
+            blogs={blogs} 
+            setBlogs={setBlogs} 
+            user={user}
+            displayMessage={displayMessage}/>
         </div>
       }
     </div>
