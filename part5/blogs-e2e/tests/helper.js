@@ -15,4 +15,19 @@ const createBlog = async (page, title, author, url) => {
   await bloglistDiv.getByText(title).waitFor()
 }
 
-export { loginWith, createBlog }
+const logout = async (page) => {
+  await page.getByRole('button', { name: 'log out' }).click()
+}
+
+const likeByText = async (page, text, numOfLikes) => {
+  const blogDiv = page.getByTestId('blog').filter({ hasText: text })
+  await blogDiv.getByRole('button', { name: 'view' }).click()
+  const likesDiv = blogDiv.getByTestId('likes')
+  const likeButton = likesDiv.getByRole('button', { name: 'like' })
+  for (let i=0; i<numOfLikes; i++) {
+    await likeButton.click()
+  }
+  await blogDiv.getByText('like').waitFor()
+}
+
+export { loginWith, createBlog, logout, likeByText }
