@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import BlogsList from './components/BlogsList'
 import LoginForm from './components/LoginForm'
 import NewBlogForm from './components/NewBlogForm'
@@ -44,6 +45,8 @@ const App = () => {
   }
 
 
+  const padding = { padding: 5 }
+
   const newBlogForm = () => {
     const hideWhenVisible = { display: newBlogFormVisible ? 'none' : '' }
     const showWhenVisible = { display: newBlogFormVisible ? '' : 'none' }
@@ -67,29 +70,57 @@ const App = () => {
 
 
   return (
-    <div>
+    <Router>
+      <div>
+        <Link style={padding} to="/">blogs</Link>
+        {user ? <button onClick={handleLogout}>Log out</button> : <Link style={padding} to="/login">login</Link>}
+      </div>
+
       { message && <div className="notification">{message}</div> }
 
-      { user === null ?
-        <LoginForm
-          user={user}
-          setUser={setUser}
-          displayMessage={displayMessage}
-        />
-        :
-        <div>
-          <p>{user.name} logged in  <button onClick={handleLogout}>Log out</button></p>
+      <Routes>
+        <Route path="/login" element={
+          <LoginForm 
+            user={user}
+            setUser={setUser}
+            displayMessage={displayMessage} />
+        } />
 
-          {newBlogForm()}
-
-          <BlogsList
+        <Route path="/" element={
+          <BlogsList 
             blogs={blogs}
             setBlogs={setBlogs}
             user={user}
-            displayMessage={displayMessage}/>
-        </div>
-      }
-    </div>
+            displayMessage={displayMessage} />
+        }/>
+      </Routes>
+
+      {/* <div>
+        { message && <div className="notification">{message}</div> }
+
+        { user === null ?
+          <LoginForm
+            user={user}
+            setUser={setUser}
+            displayMessage={displayMessage}
+          />
+          :
+          <div>
+            <p>{user.name} logged in  <button onClick={handleLogout}>Log out</button></p>
+
+            {newBlogForm()}
+
+            <BlogsList
+              blogs={blogs}
+              setBlogs={setBlogs}
+              user={user}
+              displayMessage={displayMessage}/>
+          </div>
+        }
+      </div> */}
+
+    </Router>
+    
   )
 }
 

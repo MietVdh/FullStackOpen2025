@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import blogService from '../services/blogs'
 import loginService from '../services/login'
 
@@ -6,6 +7,8 @@ const LoginForm = ({ user, setUser, displayMessage }) => {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+
+  const navigate = useNavigate()
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -19,6 +22,7 @@ const LoginForm = ({ user, setUser, displayMessage }) => {
       setUsername('')
       setPassword('')
       displayMessage('Login successful')
+      navigate('/')
     } catch (exception) {
       displayMessage('Wrong credentials')
       console.log('Wrong credentials')
