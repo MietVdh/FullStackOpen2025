@@ -46,9 +46,8 @@ const Blog = ({ blog, user, blogs, setBlogs, displayMessage }) => {
 
   return  (
     <div style={blogStyle}>
-      <div>
-        <Link to={`/blogs/${blog.id}`}><b>{blog.title}</b></Link> - {blog.author}
-        {/* {showDetails ? details() : <button onClick={() => setShowDetails(true)}>view</button>} */}
+      <div className="blog">
+        <Link to={`/blogs/${blog.id}`}><b>{blog.title}</b></Link><span> - </span><span>{blog.author}</span>
       </div>
     </div>
   )
