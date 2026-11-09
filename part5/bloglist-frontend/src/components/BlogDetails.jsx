@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom'
 import blogService from '../services/blogs'
 
 const BlogDetails = ({ user, blogs, setBlogs, displayMessage }) => {
-    console.log(blogs)
     const navigate = useNavigate()
     const { id } = useParams()
     const blog = blogs.find(b => b.id === id)

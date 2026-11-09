@@ -1,7 +1,9 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import blogService from '../services/blogs'
 
-const NewBlogForm = ({ blogs, setBlogs, displayMessage, setNewBlogFormVisible }) => {
+const NewBlogForm = ({ blogs, setBlogs, displayMessage }) => {
+  const navigate = useNavigate()
 
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
@@ -22,7 +24,8 @@ const NewBlogForm = ({ blogs, setBlogs, displayMessage, setNewBlogFormVisible })
     setTitle('')
     setAuthor('')
     setUrl('')
-    setNewBlogFormVisible(false)
+    navigate('/')
+
   }
 
   return (

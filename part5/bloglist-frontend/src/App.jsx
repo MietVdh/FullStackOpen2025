@@ -74,6 +74,7 @@ const App = () => {
     <Router>
       <div>
         <Link style={padding} to="/">blogs</Link>
+        {user ? <Link style={padding} to="/new">new blog</Link> : ''}
         {user ? <button onClick={handleLogout}>Log out</button> : <Link style={padding} to="/login">login</Link>}
       </div>
 
@@ -92,6 +93,13 @@ const App = () => {
             user={user}
             blogs={blogs}
             setBlogs={setBlogs}
+            displayMessage={displayMessage} />
+        } />
+
+        <Route path="/new" element={
+          <NewBlogForm
+            setBlogs={setBlogs}
+            blogs={blogs}
             displayMessage={displayMessage} />
         } />
 
