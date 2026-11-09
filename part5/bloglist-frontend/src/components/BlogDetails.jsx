@@ -37,7 +37,7 @@ const BlogDetails = ({ user, blogs, setBlogs, displayMessage }) => {
         <span><b>{blog.title}</b></span> - {blog.author}
         <div>
             <div>URL: <a href={blog.url}>{blog.url}</a></div>
-            <div>{likes} {likes === 1 ? 'like' : 'likes'} {user? <button onClick={handleLikeClick}>like</button> : ''}</div>
+            <div>{likes} {likes === 1 ? 'like' : 'likes'} {user ? <button onClick={handleLikeClick}>like</button> : ''}</div>
             <div>Added by {blog.user.name}</div>
             {user ? user.username === blog.user.username ?
             <button onClick={handleRemove}>remove</button>
