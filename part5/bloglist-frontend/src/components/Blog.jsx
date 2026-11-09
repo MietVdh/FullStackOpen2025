@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
+
 import blogService from '../services/blogs'
 
 const Blog = ({ blog, user, blogs, setBlogs, displayMessage }) => {
@@ -28,25 +30,25 @@ const Blog = ({ blog, user, blogs, setBlogs, displayMessage }) => {
     marginBottom: 5
   }
 
-  const details = () => {
-    return (
-      <div>
-        <div>URL: <a href={blog.url}>{blog.url}</a></div>
-        <div>{likes} {likes === 1 ? 'like' : 'likes'} <button onClick={handleLikeClick}>like</button></div>
-        <div>Added by {blog.user.name}</div>
-        <button onClick={() => setShowDetails(false)}>hide details</button>
-        {user.username === blog.user.username ?
-          <button onClick={handleRemove}>remove</button>
-          : '' }
-      </div>
-    )
-  }
+  // const details = () => {
+  //   return (
+  //     <div>
+  //       <div>URL: <a href={blog.url}>{blog.url}</a></div>
+  //       <div>{likes} {likes === 1 ? 'like' : 'likes'} <button onClick={handleLikeClick}>like</button></div>
+  //       <div>Added by {blog.user.name}</div>
+  //       <button onClick={() => setShowDetails(false)}>hide details</button>
+  //       {user.username === blog.user.username ?
+  //         <button onClick={handleRemove}>remove</button>
+  //         : '' }
+  //     </div>
+  //   )
+  // }
 
   return  (
     <div style={blogStyle}>
       <div>
-        <span><b>{blog.title}</b></span> - {blog.author}
-        {showDetails ? details() : <button onClick={() => setShowDetails(true)}>view</button>}
+        <Link to={`/blogs/${blog.id}`}><b>{blog.title}</b></Link> - {blog.author}
+        {/* {showDetails ? details() : <button onClick={() => setShowDetails(true)}>view</button>} */}
       </div>
     </div>
   )
