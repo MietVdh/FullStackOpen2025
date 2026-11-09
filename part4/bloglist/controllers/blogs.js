@@ -14,7 +14,7 @@ blogsRouter.post('/', async (request, response) => {
   const blog = new Blog(request.body)
   const user = request.user
   if (!user) {
-    response.status(401).json({ error: 'you must be logged in to post' })
+    return response.status(401).json({ error: 'you must be logged in to post' })
   }
   if (!blog.title || !blog.url) {
     response.status(400).end()
