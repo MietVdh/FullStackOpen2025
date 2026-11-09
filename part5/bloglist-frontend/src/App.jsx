@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import BlogsList from './components/BlogsList'
+import BlogDetails from './components/BlogDetails'
 import LoginForm from './components/LoginForm'
 import NewBlogForm from './components/NewBlogForm'
 import blogService from './services/blogs'
@@ -83,6 +84,14 @@ const App = () => {
           <LoginForm 
             user={user}
             setUser={setUser}
+            displayMessage={displayMessage} />
+        } />
+
+        <Route path="/blogs/:id" element={
+          <BlogDetails
+            user={user}
+            blogs={blogs}
+            setBlogs={setBlogs}
             displayMessage={displayMessage} />
         } />
 
