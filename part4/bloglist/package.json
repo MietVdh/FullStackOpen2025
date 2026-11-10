@@ -10,7 +10,8 @@
     "start": "cross-env NODE_ENV=production node index.js",
     "test": "cross-env NODE_ENV=test node --test",
     "dev": "cross-env NODE_ENV=development node --watch index.js",
-    "start:test": "cross-env NODE_ENV=test node --watch index.js"
+    "start:test": "cross-env NODE_ENV=test node --watch index.js",
+    "lint": "eslint ."
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -22,6 +23,10 @@
     "mongoose": "^8.14.1"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "eslint": "^10.14.0",
+    "globals": "^17.14.0",
     "supertest": "^7.1.1"
   }
 }

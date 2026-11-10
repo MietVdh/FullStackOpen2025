@@ -1,4 +1,4 @@
-const { test, after, beforeEach, describe } = require('node:test')
+const { test, after, before, beforeEach, describe } = require('node:test')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
@@ -7,6 +7,7 @@ const Blog = require('../models/blog')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const User = require('../models/user')
+const { MONGODB_URI } = require('../utils/config')
 
 const api = supertest(app)
 
@@ -33,6 +34,11 @@ const userInfo = {
 
 let token = ''
 
+before(async () => {
+  await mongoose.connect(MONGODB_URI)
+})
+
+
 beforeEach(async () => {
   await Blog.deleteMany()
   await User.deleteMany()
@@ -49,10 +55,10 @@ beforeEach(async () => {
   }
   token = jwt.sign(userForToken, process.env.SECRET)
   initialBlogs.forEach(b => b.user = savedUser)
-  
-    
+
+
   await Blog.insertMany(initialBlogs)
-  
+
 })
 
 describe('retrieving all blogs', () => {
@@ -73,7 +79,7 @@ describe('retrieving all blogs', () => {
     const response = await api.get('/api/blogs')
     const allBlogs = response.body
     const firstBlog = allBlogs[0]
-    assert(firstBlog.hasOwnProperty('id'))
+    assert(Object.prototype.hasOwnProperty.call(firstBlog, 'id'))
   })
 })
 
@@ -112,7 +118,7 @@ describe('creating a new post', () => {
       .post('/api/blogs')
       .set({ Authorization: `Bearer ${token}` })
       .send(newBlog)
-    
+
     const newlyAddedBlog = response.body
 
     assert.strictEqual(newlyAddedBlog.likes, 0)
@@ -126,7 +132,7 @@ describe('creating a new post', () => {
       likes: 12
     }
 
-    const response = await api
+    await api
       .post('/api/blogs')
       .set({ Authorization: `Bearer ${token}` })
       .send(newBlog)
@@ -140,7 +146,7 @@ describe('creating a new post', () => {
       likes: 12
     }
 
-    const response = await api
+    await api
       .post('/api/blogs')
       .set({ Authorization: `Bearer ${token}` })
       .send(newBlog)
@@ -199,7 +205,8 @@ describe('updating a post', () => {
     const blogToUpdate = blogsAtStart.body[0]
     const updatedBlog = await api
       .put(`/api/blogs/${blogToUpdate.id}`)
-      .send({...blogToUpdate, likes: 12})
+      .set({ Authorization: `Bearer ${token}` })
+      .send({ ...blogToUpdate, likes: 12 })
     assert.strictEqual(updatedBlog.body.likes, 12)
   })
 })
@@ -210,7 +217,7 @@ describe('testing user creation', () => {
       await User.deleteMany({})
 
       const passwordHash = await bcrypt.hash('sekret', 10)
-      const user = new User({ username: 'root', passwordHash})
+      const user = new User({ username: 'root', passwordHash })
 
       await user.save()
     })
@@ -225,10 +232,10 @@ describe('testing user creation', () => {
       }
 
       await api
-      .post('/api/users')
-      .send(newUser)
-      .expect(201)
-      .expect('Content-Type', /application\/json/)
+        .post('/api/users')
+        .send(newUser)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
 
       const usersAtEnd = (await User.find({}))
       assert.strictEqual(usersAtEnd.length, usersAtStart.length + 1)
@@ -239,22 +246,22 @@ describe('testing user creation', () => {
     })
 
     test('creating a user with too short a username fails with status 400', async () => {
-        const usersAtStart = (await User.find({}))
+      const usersAtStart = (await User.find({}))
 
-        const newUser = {
-          username: 'HP',
-          name: 'Harry Potter',
-          password: 'quidditch',
-        }
+      const newUser = {
+        username: 'HP',
+        name: 'Harry Potter',
+        password: 'quidditch',
+      }
 
-        await api
+      await api
         .post('/api/users')
         .send(newUser)
         .expect(400)
         .expect('Content-Type', /application\/json/)
 
-        const usersAtEnd = (await User.find({}))
-        assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+      const usersAtEnd = (await User.find({}))
+      assert.strictEqual(usersAtEnd.length, usersAtStart.length)
     })
   })
 })
