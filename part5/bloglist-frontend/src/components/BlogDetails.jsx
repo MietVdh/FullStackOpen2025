@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { Typography, Box, Button } from '@mui/material'
 import blogService from '../services/blogs'
 
 const BlogDetails = ({ user, blogs, setBlogs, displayMessage }) => {
@@ -10,8 +11,9 @@ const BlogDetails = ({ user, blogs, setBlogs, displayMessage }) => {
 
   
     const handleLikeClick = async () => {
-      const updatedBlog = await blogService.update(blog, { ...blog, likes: likes + 1 })
-      setLikes(likes + 1)
+      const newLikes = likes + 1
+      setLikes(newLikes)
+      const updatedBlog = await blogService.update(blog, { ...blog, likes: newLikes })
       setBlogs(blogs.map(b => b.id === blog.id ? updatedBlog : b))
     }
   
@@ -25,32 +27,31 @@ const BlogDetails = ({ user, blogs, setBlogs, displayMessage }) => {
     }
   
     const blogStyle = {
-      paddingTop: 10,
-      paddingLeft: 2,
-      border: 'solid',
-      borderWidth: 1,
+      paddingTop: 2,
+      paddingLeft: 10,
+      paddingRight: 10,
+      border: 'none',
       marginBottom: 5
     }
 
     return  (
-    <div style={blogStyle}>
-      <div>
-        <span><b>{blog.title}</b></span> - {blog.author}
-        <div>
-            <div>URL: <a href={blog.url}>{blog.url}</a></div>
-            <div>
+    <Box sx={blogStyle}>
+        <Typography variant="h3" sx={{paddingBottom: 2}}>{blog.title}</Typography>
+        <Typography variant="h5">by {blog.author}</Typography>
+
+            <div style={{marginTop: 10, marginBottom: 10}}><a href={blog.url}>{blog.url}</a></div>
+            <div style={{marginTop: 10, marginBottom: 10}}>Added by {blog.user.name}</div>
+            <div style={{marginTop: 10, marginBottom: 10}}>
               <span data-testid="likes">{likes} {likes === 1 ? 'like' : 'likes'}</span> 
               {user 
-                ? <button data-testid="likeBtn" onClick={handleLikeClick}>like</button> 
+                ? <Button data-testid="likeBtn" onClick={handleLikeClick} variant="contained" color="primary" style={{ marginLeft: 10 }}>like</Button> 
                 : ''}
-            </div>
-            <div>Added by {blog.user.name}</div>
+            
             {user ? user.username === blog.user.username ?
-            <button name="remove" data-testid="removeBtn" onClick={handleRemove}>remove</button>
+            <Button name="remove" data-testid="removeBtn" onClick={handleRemove} variant="contained" color="error" style={{ marginLeft: 10 }}>remove</Button>
             : '' : ''}
-        </div>
-      </div>
-    </div>
+            </div>
+        </Box>
   )
 }
 
