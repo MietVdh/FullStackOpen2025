@@ -22,11 +22,10 @@ const LoginForm = ({ setUser, displayMessage }) => {
       setUser(user)
       setUsername('')
       setPassword('')
-      displayMessage({text: 'Login successful', type: 'success'})
+      displayMessage({ text: 'Login successful', type: 'success' })
       navigate('/')
-    } catch (exception) {
-      displayMessage({text: 'Wrong credentials', type: 'error'})
-      console.log('Wrong credentials')
+    } catch {
+      displayMessage({ text: 'Wrong credentials', type: 'error' })
     }
   }
 

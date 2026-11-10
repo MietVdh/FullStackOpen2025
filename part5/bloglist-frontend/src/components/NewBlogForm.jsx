@@ -20,7 +20,7 @@ const NewBlogForm = ({ blogs, setBlogs, displayMessage }) => {
     }
 
     const returnedBlog = await blogService.create(newBlog)
-    displayMessage({text: `A new blog "${returnedBlog.title}" by ${returnedBlog.author} added`, type: 'success'})
+    displayMessage({ text: `A new blog "${returnedBlog.title}" by ${returnedBlog.author} added`, type: 'success' })
     setBlogs(blogs.concat(returnedBlog))
     setTitle('')
     setAuthor('')
@@ -35,22 +35,22 @@ const NewBlogForm = ({ blogs, setBlogs, displayMessage }) => {
       <form onSubmit={handleNewBlogSubmit}>
         <div>
           <TextField
-          label="Title"
-          type="text" 
-          onChange={({ target }) => setTitle(target.value)} 
-          name="blog-title" 
-          value={title} 
-          style={{ marginTop: 10 }}
-          data-testid="title-input"
-        />
+            label="Title"
+            type="text"
+            onChange={({ target }) => setTitle(target.value)}
+            name="blog-title"
+            value={title}
+            style={{ marginTop: 10 }}
+            data-testid="title-input"
+          />
         </div>
         <div>
           <TextField
             label="Author"
-            type="text" 
-            onChange={({ target }) => setAuthor(target.value)} 
-            name="blog-author" 
-            value={author} 
+            type="text"
+            onChange={({ target }) => setAuthor(target.value)}
+            name="blog-author"
+            value={author}
             style={{ marginTop: 10 }}
             data-testid="author-input"
           />
@@ -58,10 +58,10 @@ const NewBlogForm = ({ blogs, setBlogs, displayMessage }) => {
         <div>
           <TextField
             label="Url"
-            type="text" 
-            onChange={({ target }) => setUrl(target.value)} 
-            name="blog-url" 
-            value={url} 
+            type="text"
+            onChange={({ target }) => setUrl(target.value)}
+            name="blog-url"
+            value={url}
             style={{ marginTop: 10 }}
             data-testid="url-input"
           />
