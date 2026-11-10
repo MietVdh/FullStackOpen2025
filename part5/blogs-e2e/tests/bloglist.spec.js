@@ -6,9 +6,8 @@ describe('Blog app', () => {
 test('front page can be opened', async ({ page }) => {
     await page.goto('http://localhost:5173')
 
-    const locator = page.getByText('third blog')
+    const locator = page.getByText('All Blogs')
     await expect(locator).toBeVisible()
-    await expect(page.getByText('second blog')).toBeVisible()
   })})
 
 

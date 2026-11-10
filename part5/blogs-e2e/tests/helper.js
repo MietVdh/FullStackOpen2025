@@ -1,3 +1,4 @@
+const { expect } = require('@playwright/test')
 
 const loginWith = async (page, username, password) => {
   const loginResponse = page.waitForResponse(response =>
@@ -5,20 +6,32 @@ const loginWith = async (page, username, password) => {
         response.request().method() === 'POST'
     )
 
-  await page.goto('http://localhost:5173/login')
-  await page.getByTestId('username').fill(username)
-  await page.getByTestId('password').fill(password)
+  await page.goto('/login')
+  await page.getByRole('textbox', { name: 'Username' }).fill(username)
+  await page.getByRole('textbox', { name: 'Password' }).fill(password)
   await page.getByRole('button', { name: 'log in' }).click()
-}
 
+
+  await loginResponse
+}
+ 
 const createBlog = async (page, title, author, url) => {
-  await page.goto('http://localhost:5173/new')
-  await page.getByTestId('title-input').fill(title)
-  await page.getByTestId('author-input').fill(author)
-  await page.getByTestId('url-input').fill(url)
+  await page.goto('/new')
+
+  await page.getByRole('textbox', { name: 'Title' }).fill(title)
+  await page.getByRole('textbox', { name: 'Author' }).fill(author)
+  await page.getByRole('textbox', { name: 'URL' }).fill(url)
+
+   const createResponse = page.waitForResponse(response =>
+    response.url().endsWith('/api/blogs') &&
+    response.request().method() === 'POST' &&
+    response.ok()
+  )
+
   await page.getByRole('button', { name: 'create' }).click()
-  // const bloglistDiv = await page.getByTestId('bloglist')
-  // await bloglistDiv.getByText(title).waitFor()
+  await createResponse
+  await expect(page.getByTestId('blog').filter({ hasText: title }))
+    .toBeVisible()
 }
 
 const logout = async (page) => {
