@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
-import { Container } from '@mui/material'
+import { AppBar, Button, Container, Toolbar } from '@mui/material'
 import BlogsList from './components/BlogsList'
 import BlogDetails from './components/BlogDetails'
 import LoginForm from './components/LoginForm'
 import NewBlogForm from './components/NewBlogForm'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 
 
@@ -12,7 +13,7 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
-  const [newBlogFormVisible, setNewBlogFormVisible] = useState(false)
+  // const [newBlogFormVisible, setNewBlogFormVisible] = useState(false)
 
 
   useEffect(() => {
@@ -43,44 +44,49 @@ const App = () => {
     window.localStorage.removeItem('bloglistUser')
     blogService.setToken(null)
     setUser(null)
-    displayMessage('You were successfully logged out')
+    displayMessage({text: 'You were successfully logged out', type: 'success'})
   }
 
 
   const padding = { padding: 5 }
 
-  const newBlogForm = () => {
-    const hideWhenVisible = { display: newBlogFormVisible ? 'none' : '' }
-    const showWhenVisible = { display: newBlogFormVisible ? '' : 'none' }
+  // const newBlogForm = () => {
+  //   const hideWhenVisible = { display: newBlogFormVisible ? 'none' : '' }
+  //   const showWhenVisible = { display: newBlogFormVisible ? '' : 'none' }
 
-    return (
-      <div>
-        <div style={hideWhenVisible}>
-          <button onClick={() => setNewBlogFormVisible(true)}>new blog</button>
-        </div>
-        <div style={showWhenVisible}>
-          <NewBlogForm
-            setBlogs={setBlogs}
-            blogs={blogs}
-            displayMessage={displayMessage}
-            setNewBlogFormVisible={setNewBlogFormVisible}/>
-          <button onClick={() => setNewBlogFormVisible(false)}>cancel</button>
-        </div>
-      </div>
-    )
-  }
+  //   return (
+  //     <div>
+  //       <div style={hideWhenVisible}>
+  //         <button onClick={() => setNewBlogFormVisible(true)}>new blog</button>
+  //       </div>
+  //       <div style={showWhenVisible}>
+  //         <NewBlogForm
+  //           setBlogs={setBlogs}
+  //           blogs={blogs}
+  //           displayMessage={displayMessage}
+  //           setNewBlogFormVisible={setNewBlogFormVisible}/>
+  //         <button onClick={() => setNewBlogFormVisible(false)}>cancel</button>
+  //       </div>
+  //     </div>
+  //   )
+  // }
 
+  const style = { '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' } }
 
   return (
     <Container>
       <Router>
-      <div>
-        <Link style={padding} to="/">blogs</Link>
-        {user ? <Link style={padding} to="/new">new blog</Link> : ''}
-        {user ? <button onClick={handleLogout}>Log out</button> : <Link style={padding} to="/login">login</Link>}
-      </div>
+      <AppBar position="static" style={{ marginBottom: 20, padding: 10 }}>
+        <Toolbar>
+          <Button color="inherit" component={Link} to="/" sx={style}>Blogs</Button>
+    
+        {user ? <Button color="inherit" component={Link} sx={style} to="/new">new blog</Button> : ''}
+        {user ? <Button color="inherit" onClick={handleLogout} sx={style}>Log out</Button> : <Button color="inherit" component={Link} sx={style} to="/login">login</Button>}
+      
+      </Toolbar>
+      </AppBar>
 
-      { message && <div className="notification">{message}</div> }
+      <Notification message={message} />
 
       <Routes>
         <Route path="/login" element={

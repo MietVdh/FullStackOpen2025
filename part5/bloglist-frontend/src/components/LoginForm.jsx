@@ -22,10 +22,10 @@ const LoginForm = ({ setUser, displayMessage }) => {
       setUser(user)
       setUsername('')
       setPassword('')
-      displayMessage('Login successful')
+      displayMessage({text: 'Login successful', type: 'success'})
       navigate('/')
     } catch (exception) {
-      displayMessage('Wrong credentials')
+      displayMessage({text: 'Wrong credentials', type: 'error'})
       console.log('Wrong credentials')
     }
   }
@@ -49,7 +49,7 @@ const LoginForm = ({ setUser, displayMessage }) => {
           label="Password"
           type="password"
           value={password}
-          name="username"
+          name="password"
           data-testid="password"
           onChange={({ target }) => setPassword(target.value)}
           style={{ marginTop: 10 }}

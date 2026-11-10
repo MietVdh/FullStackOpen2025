@@ -19,7 +19,7 @@ const BlogDetails = ({ user, blogs, setBlogs, displayMessage }) => {
       if (window.confirm(`Remove blog "${blog.title}" by ${blog.author}?`)) {
         blogService.remove(blog.id)
         setBlogs(blogs.filter(b => b.id !== blog.id))
-        displayMessage(`Blog "${blog.title}" by ${blog.author} has been deleted`)
+        displayMessage({text: `Blog "${blog.title}" by ${blog.author} has been deleted`, type: 'success'})
         navigate('/')
       }
     }

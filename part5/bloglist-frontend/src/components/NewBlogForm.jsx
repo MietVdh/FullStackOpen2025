@@ -20,7 +20,7 @@ const NewBlogForm = ({ blogs, setBlogs, displayMessage }) => {
     }
 
     const returnedBlog = await blogService.create(newBlog)
-    displayMessage(`A new blog "${returnedBlog.title}" by ${returnedBlog.author} added`)
+    displayMessage({text: `A new blog "${returnedBlog.title}" by ${returnedBlog.author} added`, type: 'success'})
     setBlogs(blogs.concat(returnedBlog))
     setTitle('')
     setAuthor('')
