@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import { Container } from '@mui/material'
 import BlogsList from './components/BlogsList'
 import BlogDetails from './components/BlogDetails'
 import LoginForm from './components/LoginForm'
@@ -71,7 +72,8 @@ const App = () => {
 
 
   return (
-    <Router>
+    <Container>
+      <Router>
       <div>
         <Link style={padding} to="/">blogs</Link>
         {user ? <Link style={padding} to="/new">new blog</Link> : ''}
@@ -136,6 +138,8 @@ const App = () => {
       </div> */}
 
     </Router>
+    </Container>
+    
     
   )
 }

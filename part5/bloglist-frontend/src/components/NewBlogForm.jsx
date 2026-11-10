@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { TextField, Button } from '@mui/material'
 import blogService from '../services/blogs'
 
 const NewBlogForm = ({ blogs, setBlogs, displayMessage }) => {
@@ -30,39 +31,42 @@ const NewBlogForm = ({ blogs, setBlogs, displayMessage }) => {
 
   return (
     <div>
-      <h2>Create new</h2>
+      <h2>Add New Blog</h2>
       <form onSubmit={handleNewBlogSubmit}>
-        <label>
-          title:
-          <input 
-            type="text" 
-            onChange={({ target }) => setTitle(target.value)} 
-            name="blog-title" 
-            value={title} 
-            data-testid="title-input"
-          />
-        </label>
-        <label>
-          author:
-          <input 
+        <div>
+          <TextField
+          label="Title"
+          type="text" 
+          onChange={({ target }) => setTitle(target.value)} 
+          name="blog-title" 
+          value={title} 
+          style={{ marginTop: 10 }}
+          data-testid="title-input"
+        />
+        </div>
+        <div>
+          <TextField
+            label="Author"
             type="text" 
             onChange={({ target }) => setAuthor(target.value)} 
             name="blog-author" 
             value={author} 
+            style={{ marginTop: 10 }}
             data-testid="author-input"
           />
-        </label>
-        <label>
-          url:
-          <input 
+        </div>
+        <div>
+          <TextField
+            label="Url"
             type="text" 
             onChange={({ target }) => setUrl(target.value)} 
             name="blog-url" 
             value={url} 
+            style={{ marginTop: 10 }}
             data-testid="url-input"
           />
-        </label>
-        <button type="submit">create</button>
+        </div>
+        <Button type="submit" variant="contained" style={{ marginTop: 10 }}>create</Button>
       </form>
     </div>
   )}
