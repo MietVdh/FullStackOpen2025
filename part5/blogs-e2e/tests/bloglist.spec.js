@@ -48,20 +48,6 @@ describe('Blog app', () => {
     })
   })
 
-  // test('login response', async ({ page }) => {
-  //     const loginResponsePromise = page.waitForResponse(response =>
-  //         response.url().includes('/api/login') &&
-  //         response.request().method() === 'POST'
-  //     )
-
-  //     await loginWith(page, 'mluukkai', 'salainen')
-
-  //     const response = await loginResponsePromise
-
-  //     console.log('status:', response.status())
-  //     console.log('body:', await response.json())
-  // })
-
   describe('When logged in', () => {
     beforeEach(async ({ page }) => {
       await loginWith(page, 'mluukkai', 'salainen')

@@ -97,31 +97,6 @@ const App = () => {
               displayMessage={displayMessage} />
           }/>
         </Routes>
-
-        {/* <div>
-        { message && <div className="notification">{message}</div> }
-
-        { user === null ?
-          <LoginForm
-            user={user}
-            setUser={setUser}
-            displayMessage={displayMessage}
-          />
-          :
-          <div>
-            <p>{user.name} logged in  <button onClick={handleLogout}>Log out</button></p>
-
-            {newBlogForm()}
-
-            <BlogsList
-              blogs={blogs}
-              setBlogs={setBlogs}
-              user={user}
-              displayMessage={displayMessage}/>
-          </div>
-        }
-      </div> */}
-
       </Router>
     </Container>
 

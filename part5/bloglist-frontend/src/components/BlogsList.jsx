@@ -21,7 +21,6 @@ const BlogsList = ({ blogs, setBlogs, user, displayMessage }) => (
 BlogsList.propTypes = {
   blogs: PropTypes.array.isRequired,
   setBlogs: PropTypes.func.isRequired,
-  // user: PropTypes.object.isRequired,
   displayMessage: PropTypes.func.isRequired
 }
 

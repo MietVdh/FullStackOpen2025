@@ -63,9 +63,6 @@ test('when like button is clicked twice, handler is called twice', async () => {
 })
 
 
-// Blog information and the number of likes are displayed to unauthenticated users,
-// buttons are not displayed
-
 test('when no user is authenticated, blog information is displayed but buttons are not shown', async () => {
   const blog = {
     id: '123',
@@ -102,7 +99,6 @@ test('when no user is authenticated, blog information is displayed but buttons a
   expect(screen.queryByRole('button', { text: 'remove' })).not.toBeInTheDocument()
 })
 
-//Authenticated users who are not the blog’s creator are shown only the like button
 
 test('when a user is authenticated who is not the creator of the blog, only the like button is shown', async () => {
   const blog = {
@@ -121,7 +117,6 @@ test('when a user is authenticated who is not the creator of the blog, only the 
     name: 'Another User',
     username: 'anotheruser'
   }
-
 
   render(
     <MemoryRouter initialEntries={[`/blogs/${blog.id}`]}>
@@ -142,10 +137,6 @@ test('when a user is authenticated who is not the creator of the blog, only the 
 })
 
 
-
-
-
-//The blog’s creator is also shown the delete button
 test('when the authenticated user is the creator of the blog, the remove button is shown', async () => {
 
   const loggedInUser = {
