@@ -83,7 +83,6 @@ const App = () => {
       <Routes>
         <Route path="/login" element={
           <LoginForm 
-            user={user}
             setUser={setUser}
             displayMessage={displayMessage} />
         } />

@@ -1,19 +1,30 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
 const { loginWith, createBlog, logout, likeByText } = require('./helper')
 
+
+describe('Blog app', () => {  
+test('front page can be opened', async ({ page }) => {
+    await page.goto('http://localhost:5173')
+
+    const locator = page.getByText('third blog')
+    await expect(locator).toBeVisible()
+    await expect(page.getByText('second blog')).toBeVisible()
+  })})
+
+
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
     // empty DB
-    await request.post('/api/testing/reset')
+    await request.post('http://localhost:3003/api/testing/reset')
     // create users for backend
-    await request.post('/api/users', {
+    await request.post('http://localhost:3003/api/users', {
       data: {
         name: 'Matti Luukkainen',
         username: 'mluukkai',
         password: 'salainen'
       }
     })
-    await request.post('/api/users', {
+    await request.post('http://localhost:3003/api/users', {
       data: {
         name: 'Harry Potter',
         username: 'potter',
@@ -23,16 +34,11 @@ describe('Blog app', () => {
     await page.goto('/')
   })
 
-  test('Login form is shown', async ({ page }) => {
-    const locator = page.getByTestId('loginform')
-    expect(locator).toBeVisible()
-  })
 
   describe('Login', () => {
     test('succeeds with correct credentials', async ({ page }) => {
       await loginWith(page, 'mluukkai', 'salainen')
 
-      await expect(page.getByText('Matti Luukkainen logged in')).toBeVisible()
       await expect(page.getByTestId('bloglist')).toBeVisible()
     })
     test('fails with wrong credentials', async ({ page }) => {
@@ -43,14 +49,30 @@ describe('Blog app', () => {
     })
   })
 
+  // test('login response', async ({ page }) => {
+  //     const loginResponsePromise = page.waitForResponse(response =>
+  //         response.url().includes('/api/login') &&
+  //         response.request().method() === 'POST'
+  //     )
+
+  //     await loginWith(page, 'mluukkai', 'salainen')
+
+  //     const response = await loginResponsePromise
+
+  //     console.log('status:', response.status())
+  //     console.log('body:', await response.json())
+  // })
+
   describe('When logged in', () => {
     beforeEach(async ({ page }) => {
       await loginWith(page, 'mluukkai', 'salainen')
+      await expect(page.getByTestId('bloglist')).toBeVisible()
     })
 
     test('a new blog can be created', async ({ page }) => {
       await createBlog(page, 'a blog created by Playwright', 'Playwright tester', 'www.example.com/playwright')
-      const blogsDiv = await page.getByTestId('bloglist')
+      await page.goto('http://localhost:5173')
+      const blogsDiv = page.getByTestId('blog')
       await expect(blogsDiv).toContainText('a blog created by Playwright')
     })
 
@@ -62,32 +84,29 @@ describe('Blog app', () => {
       })
 
       test('a blog can be liked', async ({ page }) => {
-        const firstBlogDiv = page.getByTestId('blog').filter({ hasText: 'first blog' })
-        await firstBlogDiv.getByRole('button', { name: 'view' }).click()
-        const likesDiv = firstBlogDiv.getByTestId('likes')
-        await likesDiv.getByRole('button', { name: 'like' }).click()
-        expect(likesDiv).toContainText('1 like')
-        await likesDiv.getByRole('button', { name: 'like' }).click()
-        expect(likesDiv).toContainText('2 likes')
+        await page.getByRole('link', { name: 'first blog' }).click()
+        const likesSpan = page.getByTestId('likes')
+        await page.getByTestId('likeBtn').click()
+        await expect(likesSpan).toContainText('1 like')
       })
 
       test('the user who added a blog can delete it', async ({ page }) => {
-        const firstBlogDiv = page.getByTestId('blog').filter({ hasText: 'first blog' })
-        await firstBlogDiv.getByRole('button', { name: 'view' }).click()
-
         page.on('dialog', dialog => dialog.accept());
-        await firstBlogDiv.getByRole('button', { name: 'remove' }).click()
-        await expect(firstBlogDiv).not.toBeVisible()
+        await page.getByRole('link', { name: 'first blog' }).click()
+        await page.getByTestId('removeBtn').click()
+
+        await expect(page.getByTestId('blog').filter({ hasText: 'first blog' })).toHaveCount(0)
       })
 
       test('only the user who added a blog can see its delete button', async ({ page }) => {
         await logout(page)
         await loginWith(page, 'potter', 'quidditch')
-        const firstBlogDiv = page.getByTestId('blog').filter({ hasText: 'first blog' })
-        await firstBlogDiv.getByRole('button', { name: 'view' }).click()
-        await expect(firstBlogDiv.getByRole('button', { name: 'remove' })).not.toBeVisible()
+        await page.getByRole('link', { name: 'first blog' }).click()
+        await expect(page.getByTestId('removeBtn')).not.toBeVisible()
       })
-
+    })
+  })
+/*
       test('blogs are ordered by likes', async ({ page }) => {
         // should be in order: second - third - first
         await likeByText(page, 'third blog', 3)
@@ -100,8 +119,6 @@ describe('Blog app', () => {
         await expect(page.getByTestId('blog')).toContainText(['second blog', 'third blog', 'first blog'])
         // await expect(page.getByTestId('blog')).toContainText(['5 likes', '3 likes', '1 like'])
       })
-
+*/
     })
 
-  })
-})

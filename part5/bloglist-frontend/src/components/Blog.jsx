@@ -46,7 +46,7 @@ const Blog = ({ blog, user, blogs, setBlogs, displayMessage }) => {
 
   return  (
     <div style={blogStyle}>
-      <div className="blog">
+      <div className="blog" data-testid="blog">
         <Link to={`/blogs/${blog.id}`}><b>{blog.title}</b></Link><span> - </span><span>{blog.author}</span>
       </div>
     </div>

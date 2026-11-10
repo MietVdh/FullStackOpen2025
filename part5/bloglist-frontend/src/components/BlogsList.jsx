@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 
 const BlogsList = ({ blogs, setBlogs, user, displayMessage }) => (
-  <div>
+  <div data-testid="bloglist">
     <h2>blogs</h2>
     {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
       <Blog

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import blogService from '../services/blogs'
 import loginService from '../services/login'
 
-const LoginForm = ({ user, setUser, displayMessage }) => {
+const LoginForm = ({ setUser, displayMessage }) => {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -37,6 +37,7 @@ const LoginForm = ({ user, setUser, displayMessage }) => {
           type="text"
           value={username}
           name="username"
+          data-testid="username"
           onChange={({ target }) => setUsername(target.value)}
         />
       </div>
@@ -45,6 +46,7 @@ const LoginForm = ({ user, setUser, displayMessage }) => {
           type="password"
           value={password}
           name="username"
+          data-testid="password"
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
